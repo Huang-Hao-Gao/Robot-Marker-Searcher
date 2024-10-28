@@ -1,5 +1,8 @@
 Things to keep in mind:
 
+
+The robot abstraction that we went through in the lecture is week 2 "imperative programming lecture slides" near th end. The first one NOT THE "continued" one
+
 Getting a good mark: Marking will take into account the quality of the code you write. In
 particular pay attention to the following:
 
