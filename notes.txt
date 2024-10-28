@@ -1,0 +1,98 @@
+Things to keep in mind:
+
+Getting a good mark: Marking will take into account the quality of the code you write. In
+particular pay attention to the following:
+
+• Proper declaration, definition and use of functions, variables and data structures.
+• The layout and presentation of the source code.
+• Appropriate selection of variable and function names.
+• Appropriate use of comments. Comments should add information to the source code,
+not duplicate what the code already says (i.e., no comments like "This is a variable"!).
+• As much as possible your code should be fully readable without having to add
+comments.
+• Selection of a suitable design to provide an effective solution to the problem in
+question.
+
+Clean straightforward and working code, making good use of functions, is considered better
+than longer and more complex but poorly organised code.
+
+
+
+Your source code can, and really should, make use of multiple .h and .c files. You don’t need to
+put all your code in a single source file!
+
+
+
+Notes about the actual code:
+    Walls, obstacles and any other fixed items are drawn once on the background
+    and stay in position regardless of what is drawn on the foreground. Only the robot is drawn on
+    the foreground, and by repeatedly clearing and redisplaying the robot it appears to move
+    around creating an animation effect. Updating the foreground does not affect the background,
+    and the background does not need to be redrawn when the robot moves.
+
+    The robot implementation should support only the functions listed below to control it:
+
+    • void forward(…) – move forward to the next tile in the direction the robot is facing. If
+    there is a wall or obstacle in front of the robot it does not move.
+
+    • void left(…) – turn the robot direction left (anti-clockwise) by 90 degrees, while
+    remaining on the same tile.
+
+    • void right(…) – turn the robot direction right (clockwise) by 90 degrees, while
+    remaining on the same tile.
+
+    • int atMarker(…) – return true if the robot is on a tile with a marker, otherwise false.
+
+    • int canMoveForward(…) – return true if the robot can move forward as there is no wall
+    or obstacle in front of it. Return false otherwise.
+
+    • void pickUpMarker(…) – if the robot is on a tile with a marker the marker is picked up
+    and carried by the robot. A robot can carry any number of markers.
+
+    • void dropMarker(…) – drop one marker on the tile the robot is currently on.
+
+    • int markerCount(…) – return the number of markers the robot is carrying, zero if it is
+    not carrying any markers.
+
+    Function parameters might be added to pass in the information about the robot position and
+    direction. The robot cannot move diagonally or turn through any other angle than 90 degrees.
+    The robot can have a memory, for example to build a map of the arena. You will need to
+    decide how the memory is represented and used.
+
+
+
+
+
+Stages:
+    Basic Stage 1: Display a basic rectangular arena in the drawing window, with a surrounding
+    wall and the tile grid displayed inside the walls. Place a marker in a position next to a wall.
+    
+    Basic Stage 2: Display a robot and animate it so that it moves around, finds the marker and
+    stops. This can use the basic find and follow the wall algorithm. The robot should start from
+    some random position and direction inside the arena that is not next to a wall.
+    
+    Basic Stage 3: Add the code to create a rectangular arena of random size, with a marker
+    placed at a random position next to a wall. The robot starts at a random position and direction
+    6
+    inside the arena, finds and picks up the marker, then goes to any corner, drops the marker and
+    stops.
+
+    Stage 4: Allow the marker to be placed anywhere at a random position inside the arena, with
+    the robot starting at a random position and direction to find it, and then going to any corner
+    to drop the marker. A more complex algorithm will be needed to move the robot around.
+
+    Stage 5: Add one or more obstacles and markers at random positions, with the robot finding
+    and picking up all the markers then going to a corner and dropping the markers. The robot
+    algorithm should be as resilient as possible, such that the robot cannot get stuck in a neverending cycle of movement due to the way that obstacles are positioned.
+    
+    Stage 6 (challenge): Design a fixed size and shape arena with multiple obstacles and multiple
+    markers. The robot should start at a random position and direction. Identify one tile as the
+    home tile, such that the robot collects all the markers and returns them to the home tile. An
+    additional function int isAtHome(…) can be added to the robot implementation. The arena can
+    be any shape and does not need to be rectangular.
+    
+    Stage 7 (challenge): Write the code to generate a random-sized and shaped arena with
+    multiple obstacles and multiple markers. It should be possible for the robot to succeed in
+    collecting all the markers and returning them to the home tile. A marker cannot be in an
+    inaccessible location such as being surrounded by walks and obstacles with no open path to
+    the marker.
