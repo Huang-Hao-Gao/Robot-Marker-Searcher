@@ -1,6 +1,6 @@
-    // Basic Stage 1: Display a basic rectangular arena in the drawing window, with a surrounding
-    // wall and the tile grid displayed inside the walls. Place a marker in a position next to a wall.
-
+// Basic Stage 2: Display a robot and animate it so that it moves around, finds the marker and 
+// stops. This can use the basic find and follow the wall algorithm. The robot should start from 
+// some random position and direction inside the arena that is not next to a wall.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,13 +8,14 @@
 
 #include "globals.h"
 #include "drawArena.h"
-
+#include "robot.h"
 
 
 
 int main(){
     setWindowSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     Tile *arrPointer = drawArena();
+    void runRobot(arrPointer);
     
 
     return 0;
