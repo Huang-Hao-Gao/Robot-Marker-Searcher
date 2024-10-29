@@ -11,15 +11,26 @@ const int GRID_SIZE = 30;
 const int CANVAS_WIDTH = 1000;
 const int CANVAS_HEIGHT = 800;
 
+typedef struct Tile{
+    int x;
+    int y;
+    int type;
+} Tile;
+
+
+void appendArray(int **arr, int r, int c, Tile tile){
+    //append 3 elements
+    int index = r * 5 + c * 8;
+    arr[index][0] = tile.x;
+    arr[index][1] = tile.y;
+    arr[index][2] = tile.type;
+}
 
 //function to fill a 2d array with elements, where each element is an array with [x, y, typeOfTile]
-void fillTiles(int *arr, int rows, int columns){
-    int size = rows * columns;
-    background();
-
-    //initial position to draw tiles
-    int x = CANVAS_WIDTH/4;
-    int y = CANVAS_HEIGHT/4;
+void createTiles(int **arr, int rows, int columns){
+    //initial x and y pos
+    int x = CANVAS_WIDTH/5;
+    int y = CANVAS_HEIGHT/5;
     int i = 0;
 
     //1 is wall, 2 is tile
@@ -27,13 +38,28 @@ void fillTiles(int *arr, int rows, int columns){
     
         for(int c = 0; c < columns; c++){
             //top wall
-            if(r == 0){
-                appendArray(x, y, 1)
+            if(r == 0 || r == rows - 1){
+                Tile tile = {x, y, 1};
+                appendArray(arr, r, c, tile);
+                x += GRID_SIZE;
             }
-            //every row inbetween
-
-            //bottom wall
+            else{
+                //every row inbetween   
+                if(c == 0 || c == columns - 1){
+                    //left and right wall
+                    Tile tile = {x, y, 1};
+                    appendArray(arr, r, c, tile);
+                } else{
+                    //tiles between
+                    Tile tile = {x, y, 2};
+                    appendArray(arr, r, c, tile);
+                }
+                x += GRID_SIZE;
+            }
         }
+        //move to next row
+        x = CANVAS_WIDTH/5;
+        y += GRID_SIZE;
     }
 
 
@@ -41,27 +67,23 @@ void fillTiles(int *arr, int rows, int columns){
 
 void drawArena(){
 
-    //Display the arena using lines and squares, with a value used to represent the content of each square (wall, empty, marker, obstacle, home).
-    // The arena can be stored as a 2D array in the program, where each array element
-    // represents a tile and holds a value denoting whether the tile is empty or contains a
-    // wall, obstacle or marker
-
     //2D array
     //5 rows by 8 columns
-    int arenaTiles[40][3];
-    fillTiles(arenaTiles, 5, 8);
+    // int arenaTiles[40][3];
+    int numRows = 5;
+    int numColumns = 8;
+    int size = 40;
 
-    background();
-    //from now on everything is being drawn on background
-    setColour(gray);
-    drawRect(CANVAS_WIDTH/2 - GRID_SIZE, CANVAS_HEIGHT/2 - GRID_SIZE, GRID_SIZE, GRID_SIZE);
+    //allocate memory for an array of structs
+    Tile *arenaTiles = (Tile*)malloc(size * sizeof(Tile));
+
+    createTiles(arenaTiles, 5, 8);
 
 }
 
 
 int main(){
     setWindowSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-
     drawArena();
 
 
