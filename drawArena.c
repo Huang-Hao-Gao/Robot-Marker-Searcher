@@ -24,7 +24,13 @@ void drawTiles(Tile *arr){
         int y = arr[i].y;
         int type = arr[i].type;
         if(type == 1){
+            //wall
             setColour(blue);
+            fillRect(x, y, GRID_SIZE, GRID_SIZE);
+            setColour(gray);
+        } else if(type == 3){
+            //marker
+            setColour(red);
             fillRect(x, y, GRID_SIZE, GRID_SIZE);
             setColour(gray);
         } else{
@@ -49,7 +55,7 @@ void createTiles(Tile *arr, int rows, int columns){
     int y = CANVAS_HEIGHT/5;
     int i = 0;
 
-    //1 is wall, 2 is tile
+    //1 is wall, 2 is tile, 3 is marker, 4 is obstacle
     for(int r = 0; r < rows; r++){
     
         for(int c = 0; c < columns; c++){
@@ -64,7 +70,10 @@ void createTiles(Tile *arr, int rows, int columns){
                     //left and right wall
                     Tile tile = {x, y, 1};
                     appendArray(arr, r, c, tile);
-                } else{
+                } else if(r == 1 && c == 1){
+                    Tile tile = {x, y, 3};
+                    appendArray(arr, r, c, tile);
+                 }else{
                     //tiles between walls
                     Tile tile = {x, y, 2};
                     appendArray(arr, r, c, tile);
