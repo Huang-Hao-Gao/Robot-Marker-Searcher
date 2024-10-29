@@ -12,6 +12,9 @@ const int GRID_SIZE = 30;
 const int CANVAS_WIDTH = 1000;
 const int CANVAS_HEIGHT = 800;
 
+const int numRows = 5;
+const int numColumns = 8;
+const int size = numRows * numColumns;
 
 typedef struct Tile{
     int x;
