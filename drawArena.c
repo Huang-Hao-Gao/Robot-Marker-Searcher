@@ -11,7 +11,7 @@ void printTiles(Tile *arr, int rows, int columns) {
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < columns; c++) {
             int index = r * columns + c;
-            printf("Tile at (%d, %d): x = %d, y = %d, type = %d\n", r, c, arr[index].x, arr[index].y, arr[index].type);
+            printf("Tile at (%d, %d): x = %d, y = %d, type = %d, index = %d\n", r, c, arr[index].x, arr[index].y, arr[index].type, arr[index].index);
         }
     }
 }
@@ -46,6 +46,7 @@ void appendArray(Tile *arr, int r, int c, Tile tile){
     arr[index].x = tile.x;
     arr[index].y = tile.y;
     arr[index].type = tile.type;
+    arr[index].index = tile.index;
 }
 
 //function to fill a 2d array with elements, where each element is an array with [x, y, typeOfTile]
@@ -61,22 +62,26 @@ void createTiles(Tile *arr, int rows, int columns){
         for(int c = 0; c < columns; c++){
             //top wall
             if(r == 0 || r == rows - 1){
-                Tile tile = {x, y, 1};
+                Tile tile = {x, y, 1, i};
                 appendArray(arr, r, c, tile);
                 x += GRID_SIZE;
+                i++;
             }
             else{ 
                 if(c == 0 || c == columns - 1){
                     //left and right wall
-                    Tile tile = {x, y, 1};
+                    Tile tile = {x, y, 1, i};
                     appendArray(arr, r, c, tile);
+                    i++;
                 } else if(r == 1 && c == 1){
-                    Tile tile = {x, y, 3};
+                    Tile tile = {x, y, 3, i};
                     appendArray(arr, r, c, tile);
+                    i++;
                 }else{
                     //tiles between walls
-                    Tile tile = {x, y, 2};
+                    Tile tile = {x, y, 2, i};
                     appendArray(arr, r, c, tile);
+                    i++;
                 }
                 x += GRID_SIZE;
             }
@@ -94,7 +99,7 @@ Tile* drawArena(){
     Tile *arenaTiles = (Tile*)malloc(SIZE * sizeof(Tile));
 
     createTiles(arenaTiles, NUMROWS, NUMCOLS);
-    // printTiles(arenaTiles, numRows, numColumns);
+    printTiles(arenaTiles, NUMROWS, NUMCOLS);
     drawTiles(arenaTiles);
     return arenaTiles;
 }

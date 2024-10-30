@@ -25,7 +25,7 @@ void forward(){
 
 int canMoveForward(Robot *robot, Tile *tile){
     //facing up
-    
+        //check that the tile that is current index - numCols is of type 2
 }
 
 void drawRobot(Robot *robot){

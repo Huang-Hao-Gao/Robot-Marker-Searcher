@@ -13,6 +13,7 @@ typedef struct Tile{
     int x;
     int y;
     int type;
+    int index;
 } Tile;
 
 
