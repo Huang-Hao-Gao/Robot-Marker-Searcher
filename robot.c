@@ -14,8 +14,18 @@ typedef struct Robot{
 
 
 
+
 int randomNum(int min, int max){
     return rand() % (max - min + 1) + min;
+}
+
+void forward(){
+
+}
+
+int canMoveForward(Robot *robot, Tile *tile){
+    //facing up
+    
 }
 
 void drawRobot(Robot *robot){
@@ -51,25 +61,23 @@ void drawRobot(Robot *robot){
 
 void runRobot(Tile *arr){
     Robot robot;
-    //initialise it's x, y and direction
-    // ensures that the sequence of random numbers is different each time
-    //1 is wall, 2 is tile, 3 is marker, 4 is obstacle
     int isValid = 0;
-    //initialise robot values
+    //initialise robot position
     while(!isValid){
         int index = randomNum(0, SIZE);
         if(arr[index].type == 2){
             robot.x = arr[index].x;
             robot.y = arr[index].y;
             isValid = 1;
-    }
+        }
     }
     //set random direction
     char directions[] = {'N', 'E', 'S', 'W'};
     int index = randomNum(0, 3);
     robot.direction = directions[index];
 
-
     //draw the robot
     drawRobot(&robot);
+
+
 }
