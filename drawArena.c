@@ -73,7 +73,7 @@ void createTiles(Tile *arr, int rows, int columns){
                 } else if(r == 1 && c == 1){
                     Tile tile = {x, y, 3};
                     appendArray(arr, r, c, tile);
-                 }else{
+                }else{
                     //tiles between walls
                     Tile tile = {x, y, 2};
                     appendArray(arr, r, c, tile);
@@ -96,7 +96,6 @@ Tile* drawArena(){
     createTiles(arenaTiles, NUMROWS, NUMCOLS);
     // printTiles(arenaTiles, numRows, numColumns);
     drawTiles(arenaTiles);
-    printf("%p", arenaTiles);
     return arenaTiles;
 }
 

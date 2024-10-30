@@ -4,8 +4,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "graphics.h"
+#include <time.h>
 
+#include "graphics.h"
 #include "globals.h"
 #include "drawArena.h"
 #include "robot.h"
@@ -13,9 +14,10 @@
 
 
 int main(){
+    srand(time(NULL));
     setWindowSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     Tile *arrPointer = drawArena();
-    void runRobot(arrPointer);
+    runRobot(arrPointer);
     
 
     return 0;

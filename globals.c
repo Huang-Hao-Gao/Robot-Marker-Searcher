@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include "globals.h"
+
 //The maximum canvas size is 2500,1500.
 const int CANVAS_WIDTH = 1000;
 const int CANVAS_HEIGHT = 800;
@@ -6,4 +9,6 @@ const int CANVAS_HEIGHT = 800;
 const int GRID_SIZE = 30;
 const int NUMROWS = 10;
 const int NUMCOLS = 15;
+#define NUMROWS 10
+#define NUMCOLS 15
 const int SIZE = NUMROWS * NUMCOLS;

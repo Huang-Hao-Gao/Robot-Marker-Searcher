@@ -1,46 +1,75 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "graphics.h"
 #include "globals.h"
 #include "drawArena.h"
-#include <time.h>
 
 
 typedef struct Robot{
     int x;
     int y;
-    char *direction;
+    char direction;
 } Robot;
 
 
+
 int randomNum(int min, int max){
-    return rand() + min % (max - min + 1);
+    return rand() % (max - min + 1) + min;
 }
 
-
+void drawRobot(Robot *robot){
+    foreground();
+    clear();
+    setColour(red);
+    int x = robot->x;
+    int y = robot->y;
+    int dir = robot->direction;
+    if(dir == 'N'){
+        //Facing north
+        int xCoords[] = {x + GRID_SIZE/2, x, x + GRID_SIZE};
+        int yCoords[] = {y, y + GRID_SIZE, y + GRID_SIZE};
+        fillPolygon(3, xCoords , yCoords);
+    } else if(dir == 'E'){
+        //east
+        int xCoords[] = {x, x + GRID_SIZE, x};
+        int yCoords[] = {y, y + GRID_SIZE/2, y + GRID_SIZE};
+        fillPolygon(3, xCoords , yCoords);
+    } else if(dir == 'S'){
+        //south
+        int xCoords[] = {x, x + GRID_SIZE, x + GRID_SIZE/2};
+        int yCoords[] = {y, y, y + GRID_SIZE};
+        fillPolygon(3, xCoords , yCoords);
+    } else{
+        //west
+        int xCoords[] = {x, x + GRID_SIZE, x + GRID_SIZE};
+        int yCoords[] = {y + GRID_SIZE/2, y, y + GRID_SIZE};
+        fillPolygon(3, xCoords , yCoords);
+    }
+}
 
 
 void runRobot(Tile *arr){
     Robot robot;
     //initialise it's x, y and direction
     // ensures that the sequence of random numbers is different each time
-    srand(time(NULL));
-
-
     //1 is wall, 2 is tile, 3 is marker, 4 is obstacle
     int isValid = 0;
-
     //initialise robot values
     while(!isValid){
-        int index = randomNum(0, 40);
+        int index = randomNum(0, SIZE);
         if(arr[index].type == 2){
-        robot.x = arr[index].x;
-        robot.y = arr[index].y;
-        isValid = 1;
+            robot.x = arr[index].x;
+            robot.y = arr[index].y;
+            isValid = 1;
     }
     }
+    //set random direction
+    char directions[] = {'N', 'E', 'S', 'W'};
+    int index = randomNum(0, 3);
+    robot.direction = directions[index];
+
 
     //draw the robot
+    drawRobot(&robot);
 }
