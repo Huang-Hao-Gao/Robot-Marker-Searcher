@@ -4,23 +4,15 @@
 #include "graphics.h"
 #include "globals.h"
 #include "drawArena.h"
+#include "robot.h"
 
-
-typedef struct Robot{
-    int x;
-    int y;
-    char direction;
-    int tileIndex;
-} Robot;
-
-void drawRobot(Robot *robot);
 
 
 int randomNum(int min, int max){
     return rand() % (max - min + 1) + min;
 }
 
-void forward(Robot *robot, Tile *tile){
+void forward(Robot *robot){
     switch(robot->direction){
         case 'N':
             robot->y -= GRID_SIZE;
@@ -42,6 +34,7 @@ void forward(Robot *robot, Tile *tile){
     drawRobot(robot);
 }
 
+
 int canMoveForward(Robot *robot, Tile *tile){
     int targetIndex;
     switch(robot->direction){
@@ -60,13 +53,39 @@ int canMoveForward(Robot *robot, Tile *tile){
         default:
             return 0;
     }
-    return tile[targetIndex].type == 2;
+    return tile[targetIndex].type == 2 || tile[targetIndex].type == 3;
 }
+
+
+int atMarker(Robot *robot, Tile *tile){
+    return tile[robot->tileIndex].type == 3;
+}
+
+
+void right(Robot *robot){
+    //rotate 90 degrees clockwise
+    switch(robot->direction){
+        case 'N':
+            robot->direction = 'E';
+            break;
+        case 'E':
+            robot->direction = 'S';
+            break;
+        case 'S':
+            robot->direction = 'W';
+            break;
+        case 'W': 
+            robot->direction = 'N';
+            break;
+    }
+    drawRobot(robot);
+}
+
 
 void drawRobot(Robot *robot){
     foreground();
     clear();
-    setColour(red);
+    setColour(cyan);
     int x = robot->x;
     int y = robot->y;
     int dir = robot->direction;
@@ -94,15 +113,15 @@ void drawRobot(Robot *robot){
 }
 
 
-void runRobot(Tile *arr){
+void runRobot(Tile *tile){
     Robot robot;
     int isValid = 0;
     //initialise robot position
     while(!isValid){
         int index = randomNum(0, SIZE);
-        if(arr[index].type == 2){
-            robot.x = arr[index].x;
-            robot.y = arr[index].y;
+        if(tile[index].type == 2){
+            robot.x = tile[index].x;
+            robot.y = tile[index].y;
             robot.tileIndex = index;
             isValid = 1;
         }
@@ -118,11 +137,15 @@ void runRobot(Tile *arr){
     //runs the robot
     int running = 1;
     while(running){
-        if(canMoveForward(&robot, arr)){
-            forward(&robot, arr);
+        if(atMarker(&robot, tile)){
+            running = 0;
+        }
+        else if(canMoveForward(&robot, tile)){
+            forward(&robot);
             sleep(500);
         } else{
-            running = 0;
+            right(&robot);
+            sleep(500);
         }
 
     }

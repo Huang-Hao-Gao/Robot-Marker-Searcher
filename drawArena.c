@@ -74,6 +74,7 @@ void createTiles(Tile *arr, int rows, int columns){
                     appendArray(arr, r, c, tile);
                     i++;
                 } else if(r == 1 && c == 1){
+                    //hard code the marker position for now
                     Tile tile = {x, y, 3, i};
                     appendArray(arr, r, c, tile);
                     i++;
