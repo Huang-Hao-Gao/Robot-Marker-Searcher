@@ -99,7 +99,7 @@ Tile* drawArena(){
     Tile *arenaTiles = (Tile*)malloc(SIZE * sizeof(Tile));
 
     createTiles(arenaTiles, NUMROWS, NUMCOLS);
-    printTiles(arenaTiles, NUMROWS, NUMCOLS);
+    // printTiles(arenaTiles, NUMROWS, NUMCOLS);
     drawTiles(arenaTiles);
     return arenaTiles;
 }

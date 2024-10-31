@@ -10,22 +10,57 @@ typedef struct Robot{
     int x;
     int y;
     char direction;
+    int tileIndex;
 } Robot;
 
-
+void drawRobot(Robot *robot);
 
 
 int randomNum(int min, int max){
     return rand() % (max - min + 1) + min;
 }
 
-void forward(){
-
+void forward(Robot *robot, Tile *tile){
+    switch(robot->direction){
+        case 'N':
+            robot->y -= GRID_SIZE;
+            robot->tileIndex -= NUMCOLS;
+            break;
+        case 'E':
+            robot->x += GRID_SIZE;
+            robot->tileIndex += 1;
+            break;
+        case 'S':
+            robot->y += GRID_SIZE;
+            robot->tileIndex += NUMCOLS;
+            break;
+        case 'W':
+            robot->x -= GRID_SIZE;
+            robot->tileIndex -= 1;
+            break;
+    }
+    drawRobot(robot);
 }
 
 int canMoveForward(Robot *robot, Tile *tile){
-    //facing up
-        //check that the tile that is current index - numCols is of type 2
+    int targetIndex;
+    switch(robot->direction){
+        case 'N':
+            targetIndex = robot->tileIndex - NUMCOLS;
+            break;
+        case 'E':
+            targetIndex = robot->tileIndex + 1;
+            break;
+        case 'S':
+            targetIndex = robot->tileIndex + NUMCOLS;
+            break;
+        case 'W':
+            targetIndex = robot->tileIndex - 1;
+            break;
+        default:
+            return 0;
+    }
+    return tile[targetIndex].type == 2;
 }
 
 void drawRobot(Robot *robot){
@@ -68,6 +103,7 @@ void runRobot(Tile *arr){
         if(arr[index].type == 2){
             robot.x = arr[index].x;
             robot.y = arr[index].y;
+            robot.tileIndex = index;
             isValid = 1;
         }
     }
@@ -78,6 +114,18 @@ void runRobot(Tile *arr){
 
     //draw the robot
     drawRobot(&robot);
+
+    //runs the robot
+    int running = 1;
+    while(running){
+        if(canMoveForward(&robot, arr)){
+            forward(&robot, arr);
+            sleep(500);
+        } else{
+            running = 0;
+        }
+
+    }
 
 
 }
