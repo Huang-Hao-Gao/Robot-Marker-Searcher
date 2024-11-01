@@ -8,6 +8,18 @@
 
 
 
+int atMarker(Robot *robot, Tile *tile){
+    return tile[robot->tileIndex].type == 'm';
+}
+
+void pickUpMarker(Robot *robot, Tile *tile){
+    //change the tile's type to 't' then redraw that tile
+    int tileIndex = robot->tileIndex;
+    tile[tileIndex].type = 't';
+    replaceMarker(tile[tileIndex]);
+    //increment num of markers the robot has
+    robot->numMarkers += 1;
+}
 
 void forward(Robot *robot){
     switch(robot->direction){
@@ -54,13 +66,9 @@ int canMoveForward(Robot *robot, Tile *tile){
 }
 
 
-int atMarker(Robot *robot, Tile *tile){
-    return tile[robot->tileIndex].type == 'm';
-}
 
 
 void right(Robot *robot){
-    //rotate 90 degrees clockwise
     switch(robot->direction){
         case 'N':
             robot->direction = 'E';
@@ -78,6 +86,23 @@ void right(Robot *robot){
     drawRobot(robot);
 }
 
+void left(Robot *robot){
+    switch(robot->direction){
+        case 'N':
+            robot->direction = 'W';
+            break;
+        case 'E':
+            robot->direction = 'N';
+            break;
+        case 'S':
+            robot->direction = 'E';
+            break;
+        case 'W': 
+            robot->direction = 'S';
+            break;
+    }
+    drawRobot(robot);
+}
 
 void drawRobot(Robot *robot){
     foreground();
@@ -110,7 +135,7 @@ void drawRobot(Robot *robot){
 }
 
 
-void runRobot(Tile *tile){
+void startRobot(Tile *tile){
     Robot robot;
     int isValid = 0;
     //initialise robot position
@@ -130,22 +155,23 @@ void runRobot(Tile *tile){
 
     //draw the robot
     drawRobot(&robot);
-
-    //runs the robot
-    int running = 1;
-    while(running){
-        if(atMarker(&robot, tile)){
-            running = 0;
-        }
-        else if(canMoveForward(&robot, tile)){
-            forward(&robot);
-            sleep(50);
-        } else{
-            right(&robot);
-            sleep(50);
-        }
-
+    runRobot(&robot, tile);
     }
 
 
+
+void runRobot(Robot *robot, Tile *tile){
+    int running = 1;
+    while(running){
+        if(atMarker(robot, tile)){
+            pickUpMarker(robot, tile);
+        }
+        if(canMoveForward(robot, tile)){
+            forward(robot);
+            sleep(50);
+        } else{
+            right(robot);
+            sleep(50);
+        }
+    }
 }

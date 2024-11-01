@@ -16,7 +16,7 @@ int main(){
     srand(time(NULL));
     setWindowSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     Tile *arrPointer = drawArena();
-    runRobot(arrPointer);
+    startRobot(arrPointer);
     
 
     return 0;

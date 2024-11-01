@@ -3,6 +3,7 @@
 #include "globals.h"
 
 Tile* drawArena();
+void replaceMarker(Tile curTile);
 extern int GRID_SIZE;
 extern int NUMROWS;
 extern int NUMCOLS;

@@ -7,10 +7,12 @@ typedef struct Robot{
     int y;
     char direction;
     int tileIndex;
+    int numMarkers;
 } Robot;
 
-void runRobot(Tile *arr);
+void startRobot(Tile *tile);
 void drawRobot(Robot *robot);
+void runRobot(Robot *robot, Tile *tile);
 
 
 #endif

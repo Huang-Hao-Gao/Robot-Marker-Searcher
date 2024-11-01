@@ -56,6 +56,14 @@ void drawTiles(Tile *tile){
 }
 
 
+void replaceMarker(Tile curTile){
+    background();
+    setColour(white);
+    fillRect(curTile.x, curTile.y, GRID_SIZE, GRID_SIZE);
+    setColour(gray);
+    drawRect(curTile.x, curTile.y, GRID_SIZE, GRID_SIZE);
+}
+
 void appendArray(Tile *tile, int r, int c, Tile curTile){
     //append 3 elements
     int index = r * NUMCOLS + c;
