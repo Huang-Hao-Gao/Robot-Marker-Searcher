@@ -6,6 +6,8 @@
 int GRID_SIZE = 30;
 int NUMROWS;
 int NUMCOLS;
+// Using #define for SIZE ensures that it always represents the current product of NUMROWS and NUMCOLS,
+// even if these values are changed later in the code. This keeps SIZE consistent with their current values.
 #define SIZE (NUMROWS * NUMCOLS)
 
 int randArenaSize(){

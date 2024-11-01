@@ -1,6 +1,6 @@
-// Stage 3: Add the code to create a rectangular arena of random size, with a marker placed at a random position next to a wall. The robot starts at a random position and direction 
-// inside the arena, finds and picks up the marker, then goes to any corner, drops the marker and 
-// stops. 
+// Stage 3: Add the code to create a rectangular arena of random size
+// with a marker placed at a random position next to a wall. 
+// The robot starts at a random position and direction inside the arena, finds and picks up the marker, then goes to any corner, drops the marker and stops
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
