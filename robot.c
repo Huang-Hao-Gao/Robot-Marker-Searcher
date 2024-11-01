@@ -50,12 +50,12 @@ int canMoveForward(Robot *robot, Tile *tile){
         default:
             return 0;
     }
-    return tile[targetIndex].type == 2 || tile[targetIndex].type == 3;
+    return tile[targetIndex].type == 't' || tile[targetIndex].type == 'm';
 }
 
 
 int atMarker(Robot *robot, Tile *tile){
-    return tile[robot->tileIndex].type == 3;
+    return tile[robot->tileIndex].type == 'm';
 }
 
 
@@ -116,7 +116,7 @@ void runRobot(Tile *tile){
     //initialise robot position
     while(!isValid){
         int index = randomNum(0, SIZE);
-        if(tile[index].type == 2){
+        if(tile[index].type == 't'){
             robot.x = tile[index].x;
             robot.y = tile[index].y;
             robot.tileIndex = index;

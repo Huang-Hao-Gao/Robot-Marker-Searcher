@@ -24,7 +24,7 @@ void printTiles(Tile *arr, int rows, int columns) {
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < columns; c++) {
             int index = r * columns + c;
-            printf("Tile at (%d, %d): x = %d, y = %d, type = %d, index = %d\n", r, c, arr[index].x, arr[index].y, arr[index].type, arr[index].index);
+            printf("Tile at (%d, %d): x = %d, y = %d, type = %c , index = %d\n", r, c, arr[index].x, arr[index].y, arr[index].type, arr[index].index);
         }
     }
 }
@@ -35,13 +35,13 @@ void drawTiles(Tile *arr){
     for(int i = 0; i < SIZE; i++){
         int x = arr[i].x;
         int y = arr[i].y;
-        int type = arr[i].type;
-        if(type == 1){
+        char type = arr[i].type;
+        if(type == 'w'){
             //wall
             setColour(blue);
             fillRect(x, y, GRID_SIZE, GRID_SIZE);
             setColour(gray);
-        } else if(type == 3){
+        } else if(type == 'm'){
             //marker
             setColour(red);
             fillRect(x, y, GRID_SIZE, GRID_SIZE);
@@ -69,13 +69,12 @@ void createTiles(Tile *arr, int rows, int columns){
     int y = CANVAS_HEIGHT/5;
     int i = 0;
 
-    //1 is wall, 2 is tile, 3 is marker, 4 is obstacle
     for(int r = 0; r < rows; r++){
     
         for(int c = 0; c < columns; c++){
             //top wall
             if(r == 0 || r == rows - 1){
-                Tile tile = {x, y, 1, i};
+                Tile tile = {x, y, 'w', i};
                 appendArray(arr, r, c, tile);
                 x += GRID_SIZE;
                 i++;
@@ -83,17 +82,17 @@ void createTiles(Tile *arr, int rows, int columns){
             else{ 
                 if(c == 0 || c == columns - 1){
                     //left and right wall
-                    Tile tile = {x, y, 1, i};
+                    Tile tile = {x, y, 'w', i};
                     appendArray(arr, r, c, tile);
                     i++;
                 } else if(r == 1 && c == 1){
                     //hard code the marker position for now
-                    Tile tile = {x, y, 3, i};
+                    Tile tile = {x, y, 'm', i};
                     appendArray(arr, r, c, tile);
                     i++;
                 }else{
                     //tiles between walls
-                    Tile tile = {x, y, 2, i};
+                    Tile tile = {x, y, 't', i};
                     appendArray(arr, r, c, tile);
                     i++;
                 }

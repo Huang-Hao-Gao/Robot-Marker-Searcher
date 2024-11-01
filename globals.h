@@ -8,7 +8,7 @@ extern const int CANVAS_HEIGHT;
 typedef struct Tile{
     int x;
     int y;
-    int type;
+    char type;
     int index;
 } Tile;
 
