@@ -103,12 +103,19 @@ void createTiles(Tile *tile, int rows, int columns){
     }
 
     //randomise placement of marker
-    // int isMarker = 0;
-    // while(!isMarker){
-    //     int index = randomNum(MINROWCOL, MAXROWCOL);
-    //     //check if any adjacent tile is a wall
-    //     // if()
-    // }
+    int isMarker = 0;
+    while(!isMarker){
+        int index = randomNum(MINROWCOL, MAXROWCOL);
+        //check if any adjacent tile is a wall
+        if((tile[index - NUMCOLS].type == 'w' || 
+            tile[index - 1].type == 'w' || 
+            tile[index + 1].type == 'w' || 
+            tile[index + NUMCOLS].type == 'w') &&
+            tile[index].type == 't'){
+                tile[index].type = 'm';
+                isMarker = 1;
+        }
+    }
 }
 
 Tile* drawArena(){
