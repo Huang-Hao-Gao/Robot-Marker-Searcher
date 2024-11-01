@@ -4,10 +4,6 @@
 
 extern const int CANVAS_WIDTH;
 extern const int CANVAS_HEIGHT;
-extern const int GRID_SIZE;
-extern const int NUMROWS;
-extern const int NUMCOLS;
-extern const int SIZE;
 
 typedef struct Tile{
     int x;
@@ -16,6 +12,7 @@ typedef struct Tile{
     int index;
 } Tile;
 
+int randomNum(int min, int max);
 
 #endif // GLOBALS_H
 

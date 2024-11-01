@@ -1,7 +1,6 @@
-// Basic Stage 2: Display a robot and animate it so that it moves around, finds the marker and 
-// stops. This can use the basic find and follow the wall algorithm. The robot should start from 
-// some random position and direction inside the arena that is not next to a wall.
-
+// Stage 3: Add the code to create a rectangular arena of random size, with a marker placed at a random position next to a wall. The robot starts at a random position and direction 
+// inside the arena, finds and picks up the marker, then goes to any corner, drops the marker and 
+// stops. 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

@@ -8,9 +8,6 @@
 
 
 
-int randomNum(int min, int max){
-    return rand() % (max - min + 1) + min;
-}
 
 void forward(Robot *robot){
     switch(robot->direction){
@@ -142,10 +139,10 @@ void runRobot(Tile *tile){
         }
         else if(canMoveForward(&robot, tile)){
             forward(&robot);
-            sleep(500);
+            sleep(50);
         } else{
             right(&robot);
-            sleep(500);
+            sleep(50);
         }
 
     }
