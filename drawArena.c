@@ -55,6 +55,11 @@ void drawTiles(Tile *tile){
     }
 }
 
+void replaceFreeTile(Tile curTile){
+    background();
+    setColour(red);
+    fillRect(curTile.x, curTile.y, GRID_SIZE, GRID_SIZE);
+}
 
 void replaceMarker(Tile curTile){
     background();

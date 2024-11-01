@@ -12,6 +12,17 @@ int atMarker(Robot *robot, Tile *tile){
     return tile[robot->tileIndex].type == 'm';
 }
 
+int markerCount(Robot robot){
+    return robot.numMarkers;
+}
+
+void dropMarker(Robot *robot, Tile* tile){
+    int tileIndex = robot->tileIndex;
+    tile[tileIndex].type = 'm';
+    replaceFreeTile(tile[tileIndex]);
+    robot->numMarkers -= 1;
+}
+
 void pickUpMarker(Robot *robot, Tile *tile){
     //change the tile's type to 't' then redraw that tile
     int tileIndex = robot->tileIndex;
@@ -104,6 +115,19 @@ void left(Robot *robot){
     drawRobot(robot);
 }
 
+
+int onCorner(Robot *robot, Tile *tile){
+    int i = robot->tileIndex;
+    if(i == NUMCOLS + 1 || //top left
+       i == 2 * NUMCOLS - 2 || //top right
+       i == (NUMCOLS * (NUMROWS - 2) + 1) ||// bottom left
+       i == (NUMCOLS * (NUMROWS - 1) -2) //bottom right
+    ){
+        return 1;
+    }
+    return 0;
+}
+
 void drawRobot(Robot *robot){
     foreground();
     clear();
@@ -148,6 +172,7 @@ void startRobot(Tile *tile){
             isValid = 1;
         }
     }
+    robot.numMarkers = 0;
     //set random direction
     char directions[] = {'N', 'E', 'S', 'W'};
     int index = randomNum(0, 3);
@@ -162,16 +187,30 @@ void startRobot(Tile *tile){
 
 void runRobot(Robot *robot, Tile *tile){
     int running = 1;
+    int sleepTime = 100;
     while(running){
         if(atMarker(robot, tile)){
             pickUpMarker(robot, tile);
+            sleep(sleepTime);
         }
+        
         if(canMoveForward(robot, tile)){
             forward(robot);
-            sleep(50);
-        } else{
+            sleep(sleepTime);
+        }else{
             right(robot);
-            sleep(50);
+            sleep(sleepTime);
+
+            if(canMoveForward(robot, tile)){
+                forward(robot);
+                sleep(sleepTime);
+            }
+        
+        }
+        if(markerCount(*robot) && onCorner(robot, tile)){
+            dropMarker(robot, tile);
+            sleep(40);
+            running = 0;
         }
     }
 }
