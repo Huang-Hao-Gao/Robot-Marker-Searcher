@@ -7,7 +7,6 @@
 #include "robot.h"
 
 
-
 int atMarker(Robot *robot, Tile *tile){
     return tile[robot->tileIndex].type == 'm';
 }
@@ -186,30 +185,94 @@ void startRobot(Tile *tile){
 
 
 void runRobot(Robot *robot, Tile *tile){
+// ideas for movement algorithm
+// move to the top left tile, then snake downwards until I pick up a marker, then go back up to the top left and drop it
+// give the robot a memory of what tiles it's already been on and somehow move around until it finds the marker
+    // while(running){
+    //     if(atMarker(robot, tile)){
+    //         pickUpMarker(robot, tile);
+    //         sleep(sleepTime);
+    //     }
+        
+    //     if(canMoveForward(robot, tile)){
+    //         forward(robot);
+    //         sleep(sleepTime);
+    //     }else{
+    //         right(robot);
+    //         sleep(sleepTime);
+
+    //         if(canMoveForward(robot, tile)){
+    //             forward(robot);
+    //             sleep(sleepTime);
+    //         }
+        
+    //     }
+    //     if(markerCount(*robot) && onCorner(robot, tile)){
+    //         dropMarker(robot, tile);
+    //         sleep(40);
+    //         running = 0;
+    //     }
+    // }
+
+    //move to the top left corner, then snake my way down until I pick up a marker
+    //keep on snaking down until I reach a corner
+    //drop the marker and stop
     int running = 1;
-    int sleepTime = 100;
+    //want robot to turn right first since starting in top left
+    int atTopLeft = 0; //will equal 1 when robot is at top left and facing east
+    char rightLeft = 'r';
+    int sleepTime = 20;
     while(running){
+        while(!atTopLeft){
+            while(robot->tileIndex != NUMCOLS + 1){
+            if(canMoveForward(robot, tile)){
+            forward(robot);
+            sleep(sleepTime);
+        } else{
+            left(robot);
+            sleep(sleepTime);
+            
+        }
+        }
+        //face the right
+        while(robot->direction != 'E'){
+            right(robot);
+            sleep(sleepTime);
+        }
+
+        atTopLeft = 1;
+
+        }
+
         if(atMarker(robot, tile)){
             pickUpMarker(robot, tile);
             sleep(sleepTime);
         }
-        
         if(canMoveForward(robot, tile)){
             forward(robot);
             sleep(sleepTime);
-        }else{
+        } else if(rightLeft == 'r'){
             right(robot);
             sleep(sleepTime);
-
-            if(canMoveForward(robot, tile)){
-                forward(robot);
-                sleep(sleepTime);
-            }
-        
+            forward(robot);
+            sleep(sleepTime);
+            right(robot);
+            sleep(sleepTime);
+            rightLeft = 'l';
         }
+        else if(rightLeft == 'l'){
+            left(robot);
+            sleep(sleepTime);
+            forward(robot);
+            sleep(sleepTime);
+            left(robot);
+            sleep(sleepTime);
+            rightLeft = 'r';
+        }
+
         if(markerCount(*robot) && onCorner(robot, tile)){
             dropMarker(robot, tile);
-            sleep(40);
+            sleep(sleepTime);
             running = 0;
         }
     }
