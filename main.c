@@ -1,6 +1,7 @@
-// Stage 4: Allow the marker to be placed anywhere at a random position inside the arena, with 
-// the robot starting at a random position and direction to find it, and then going to any corner 
-// to drop the marker. A more complex algorithm will be needed to move the robot around. 
+// Stage 5: Add one or more obstacles and markers at random positions, with the robot finding 
+// and picking up all the markers then going to a corner and dropping the markers. The robot 
+// algorithm should be as resilient as possible, such that the robot cannot get stuck in a never-
+// ending cycle of movement due to the way that obstacles are positioned.
 
 #include <stdio.h>
 #include <stdlib.h>

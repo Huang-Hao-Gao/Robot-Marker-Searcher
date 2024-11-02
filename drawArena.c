@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "graphics.h"
 #include "globals.h"
+#include "drawArena.h"
 
 int GRID_SIZE = 30;
 int MINROWCOL = 7;
@@ -40,18 +41,35 @@ void drawTiles(Tile *tile){
         char type = tile[i].type;
         if(type == 'w'){
             //wall
-            setColour(blue);
-            fillRect(x, y, GRID_SIZE, GRID_SIZE);
-            setColour(gray);
+            drawOneTile(x, y, blue);
         } else if(type == 'm'){
             //marker
-            setColour(red);
-            fillRect(x, y, GRID_SIZE, GRID_SIZE);
-            setColour(gray);
+            drawOneTile(x, y, red);
+        } else if(type == 'o'){
+            //obstacle
+            drawOneTile(x, y, black);
         } else{
             //tile
             drawRect(x, y, GRID_SIZE, GRID_SIZE);
         }
+    }
+}
+
+void drawOneTile(int x, int y, colour colour){
+    setColour(colour);
+    fillRect(x, y, GRID_SIZE, GRID_SIZE);
+    setColour(gray);
+}
+
+void createUniqueTiles(Tile *tile, int numTiles, char type){
+    int tilesDrawn = 0;
+    while(tilesDrawn != numTiles){
+        int index = randomNum(NUMCOLS + 1, NUMCOLS*(NUMROWS-1) - 2);
+            //check we're on a tile
+            if(tile[index].type == 't'){
+                tile[index].type = type;
+                tilesDrawn += 1;
+            }
     }
 }
 
@@ -115,17 +133,12 @@ void createTiles(Tile *tile, int rows, int columns){
         y += GRID_SIZE;
     }
 
-    //randomise placement of marker
-    int isMarker = 0;
-    while(!isMarker){
-        int index = randomNum(NUMCOLS + 1, NUMCOLS*(NUMROWS-1) - 2);
-            //check we're on a tile
-            if(tile[index].type == 't'){
-                tile[index].type = 'm';
-                isMarker = 1;
-            }
-    }
+    //create markers
+    createUniqueTiles(tile, 3, 'm');
+    //create obstacles
+    createUniqueTiles(tile, 3, 'o');
 }
+
 
 Tile* drawArena(){
     initialiseGlobals(); // Initialise NUMROWS and NUMCOLS
