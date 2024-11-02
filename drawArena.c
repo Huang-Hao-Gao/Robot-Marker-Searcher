@@ -4,7 +4,7 @@
 #include "globals.h"
 
 int GRID_SIZE = 30;
-int MINROWCOL = 5;
+int MINROWCOL = 7;
 int MAXROWCOL = 15;
 int NUMROWS;
 int NUMCOLS;
@@ -118,16 +118,12 @@ void createTiles(Tile *tile, int rows, int columns){
     //randomise placement of marker
     int isMarker = 0;
     while(!isMarker){
-        int index = randomNum(MINROWCOL, MAXROWCOL);
-        //check if any adjacent tile is a wall
-        if((tile[index - NUMCOLS].type == 'w' || 
-            tile[index - 1].type == 'w' || 
-            tile[index + 1].type == 'w' || 
-            tile[index + NUMCOLS].type == 'w') &&
-            tile[index].type == 't'){
+        int index = randomNum(NUMCOLS + 1, NUMCOLS*(NUMROWS-1) - 2);
+            //check we're on a tile
+            if(tile[index].type == 't'){
                 tile[index].type = 'm';
                 isMarker = 1;
-        }
+            }
     }
 }
 
