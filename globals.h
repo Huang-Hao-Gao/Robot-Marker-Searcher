@@ -1,6 +1,7 @@
 // globals.h
 #ifndef GLOBALS_H
 #define GLOBALS_H
+#include <stdbool.h>
 
 extern const int CANVAS_WIDTH;
 extern const int CANVAS_HEIGHT;
@@ -10,6 +11,8 @@ typedef struct Tile{
     int y;
     char type;
     int index;
+    bool visited;
+
 } Tile;
 
 int randomNum(int min, int max);

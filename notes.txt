@@ -1,6 +1,16 @@
 Things to keep in mind:
 
 
+Programming tutor advice:
+Cares about code:
+Max 1 or 2 global variables
+Complete all stages but leave it at that he won’t give more marks for optimisation
+Comments throughout code
+Short functions
+Appropriate names
+Graham cares much more about the code rather than the algorithm
+
+
 The robot abstraction that we went through in the lecture is week 2 "imperative programming lecture slides" near th end. The first one NOT THE "continued" one
 
 Getting a good mark: Marking will take into account the quality of the code you write. In

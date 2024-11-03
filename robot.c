@@ -182,67 +182,35 @@ void startRobot(Tile *tile){
     runRobot(&robot, tile);
     }
 
+//creates a data type which is a pointer to a function which takes a parameter of Robot*
+typedef void(*funcPtr)(Robot*);
 
+void pushToStack(funcPtr func, funcPtr *stack, int *topPtr){
+    stack[*topPtr] = func;
+    *topPtr++;
+}
+
+funcPtr popFromStack(funcPtr *stack, int *topPtr){
+    if(*topPtr > 0){
+        funcPtr popped = stack[*topPtr - 1];
+        *topPtr--;
+        return popped;
+    } else{
+        printf("tried to pop from empty stack\n");
+    }
+}
 
 void runRobot(Robot *robot, Tile *tile){
-// move to the top left tile, then snake downwards until I pick up a marker, then go back up to the top left and drop it
     int running = 1;
-    //want robot to turn right first since starting in top left
-    int atTopLeft = 0; //will equal 1 when robot is at top left and facing east
-    char rightLeft = 'r';
     int sleepTime = 20;
+
+    //create an array to be the stack
+    const int MAXSIZE = 200;
+    funcPtr *stack = (funcPtr)malloc(MAXSIZE * sizeof(funcPtr));
+    int topOfStack = 0;
+    int topPtr = &topOfStack;
+
     while(running){
-        while(!atTopLeft){
-            while(robot->tileIndex != NUMCOLS + 1){
-            if(canMoveForward(robot, tile)){
-            forward(robot);
-            sleep(sleepTime);
-        } else{
-            left(robot);
-            sleep(sleepTime);
-            
-        }
-        }
-        //face the right
-        while(robot->direction != 'E'){
-            right(robot);
-            sleep(sleepTime);
-        }
-
-        atTopLeft = 1;
-
-        }
-
-        if(atMarker(robot, tile)){
-            pickUpMarker(robot, tile);
-            sleep(sleepTime);
-        }
-        if(canMoveForward(robot, tile)){
-            forward(robot);
-            sleep(sleepTime);
-        } else if(rightLeft == 'r'){
-            right(robot);
-            sleep(sleepTime);
-            forward(robot);
-            sleep(sleepTime);
-            right(robot);
-            sleep(sleepTime);
-            rightLeft = 'l';
-        }
-        else if(rightLeft == 'l'){
-            left(robot);
-            sleep(sleepTime);
-            forward(robot);
-            sleep(sleepTime);
-            left(robot);
-            sleep(sleepTime);
-            rightLeft = 'r';
-        }
-
-        if(markerCount(*robot) && onCorner(robot, tile)){
-            dropMarker(robot, tile);
-            sleep(sleepTime);
-            running = 0;
-        }
+        
     }
 }
