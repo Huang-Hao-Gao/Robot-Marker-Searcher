@@ -200,6 +200,31 @@ funcPtr popFromStack(funcPtr *stack, int *topPtr){
     }
 }
 
+bool visited(Robot *robot, Tile *tile){
+    return tile[robot->tileIndex].visited;
+}
+
+void faceNorth(Robot *robot){
+    while(robot->direction != 'N'){
+        right(robot);
+    }
+}
+void faceEast(Robot *robot){
+    while(robot->direction != 'E'){
+        right(robot);
+    }
+}
+void faceSouth(Robot *robot){
+    while(robot->direction != 'S'){
+        right(robot);
+    }
+}
+void faceWest(Robot *robot){
+    while(robot->direction != 'W'){
+        right(robot);
+    }
+}
+
 void runRobot(Robot *robot, Tile *tile){
     int running = 1;
     int sleepTime = 20;
@@ -208,9 +233,34 @@ void runRobot(Robot *robot, Tile *tile){
     const int MAXSIZE = 200;
     funcPtr *stack = (funcPtr)malloc(MAXSIZE * sizeof(funcPtr));
     int topOfStack = 0;
-    int topPtr = &topOfStack;
+    int *topPtr = &topOfStack;
 
-    while(running){
-        
-    }
+
+    // pushToStack(forward, stack, topPtr);
+    // if(canMoveForward(robot, tile)){
+    //     forward(robot);
+    // } else{
+    //     right(robot);
+    //     right(robot);
+    // }
+    // while(running){
+    //     if(!visited){
+    //         tile[robot->tileIndex].visited = true;
+    //     }
+    //     if(atMarker(robot, tile)){
+    //         pickUpMarker(robot, tile);
+    //     }
+
+    //     funcPtr nextMove = popFromStack(stack, topPtr);
+    //     if(nextMove == forward && canMoveForward(robot, tile) || nextMove != forward){
+    //         nextMove(robot);
+
+    //         int index = robot->tileIndex;
+    //         //check if adjacent tiles are able to be moved into and are unvisited
+
+    //     }
+    // }
+
+
+    
 }
