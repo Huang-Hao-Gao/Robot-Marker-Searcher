@@ -162,20 +162,23 @@ void startRobot(Tile *tile){
     Robot robot;
     int isValid = 0;
     //initialise robot position
-    while(!isValid){
-        int index = randomNum(0, SIZE);
-        if(tile[index].type == 't'){
-            robot.x = tile[index].x;
-            robot.y = tile[index].y;
-            robot.tileIndex = index;
-            isValid = 1;
-        }
-    }
+    // while(!isValid){
+    //     int index = randomNum(0, SIZE);
+    //     if(tile[index].type == 't'){
+    //         robot.x = tile[index].x;
+    //         robot.y = tile[index].y;
+    //         robot.tileIndex = index;
+    //         isValid = 1;
+    //     }
+    // }
+    int index = NUMCOLS * (NUMROWS - 2) + 1;
+    robot.x = tile[index].x;
+    robot.y = tile[index].y;
+    robot.tileIndex = index;
     robot.numMarkers = 0;
     //set random direction
     char directions[] = {'N', 'E', 'S', 'W'};
-    int index = randomNum(0, 3);
-    robot.direction = directions[index];
+    robot.direction = 'N';
 
     //draw the robot
     drawRobot(&robot);
@@ -231,7 +234,7 @@ void runRobot(Robot *robot, Tile *tile){
 
     //create an array to be the stack
     const int MAXSIZE = 200;
-    funcPtr *stack = (funcPtr)malloc(MAXSIZE * sizeof(funcPtr));
+    funcPtr *stack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
     int topOfStack = 0;
     int *topPtr = &topOfStack;
 
@@ -262,5 +265,7 @@ void runRobot(Robot *robot, Tile *tile){
     // }
 
 
-    
+    REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
+    I NEED TO CHECKOUT MAIN WHEN I FIGURE OUT HOW TO DO THE ALGORITHM
+
 }
