@@ -14,5 +14,4 @@ void startRobot(Tile *tile);
 void drawRobot(Robot *robot);
 void runRobot(Robot *robot, Tile *tile);
 
-
 #endif

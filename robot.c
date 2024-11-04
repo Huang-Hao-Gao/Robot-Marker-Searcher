@@ -7,6 +7,8 @@
 #include "robot.h"
 
 
+const int SLEEPTIME = 500;
+
 int atMarker(Robot *robot, Tile *tile){
     return tile[robot->tileIndex].type == 'm';
 }
@@ -171,7 +173,7 @@ void startRobot(Tile *tile){
     //         isValid = 1;
     //     }
     // }
-    int index = NUMCOLS * (NUMROWS - 2) + 1;
+    int index = NUMCOLS * (NUMROWS - 2) + 3;
     robot.x = tile[index].x;
     robot.y = tile[index].y;
     robot.tileIndex = index;
@@ -184,6 +186,32 @@ void startRobot(Tile *tile){
     drawRobot(&robot);
     runRobot(&robot, tile);
     }
+
+
+void faceNorth(Robot *robot){
+    while(robot->direction != 'N'){
+        right(robot);
+        sleep(SLEEPTIME);
+    }
+}
+void faceEast(Robot *robot){
+    while(robot->direction != 'E'){
+        right(robot);
+        sleep(SLEEPTIME);
+    }
+}
+void faceSouth(Robot *robot){
+    while(robot->direction != 'S'){
+        right(robot);
+        sleep(SLEEPTIME);
+    }
+}
+void faceWest(Robot *robot){
+    while(robot->direction != 'W'){
+        right(robot);
+        sleep(SLEEPTIME);
+    }
+}
 
 //creates a data type which is a pointer to a function which takes a parameter of Robot*
 typedef void(*funcPtr)(Robot*);
@@ -203,40 +231,124 @@ funcPtr popFromStack(funcPtr *stack, int *topPtr){
     }
 }
 
-bool visited(Robot *robot, Tile *tile){
+bool isVisited(Robot *robot, Tile *tile){
     return tile[robot->tileIndex].visited;
 }
 
-void faceNorth(Robot *robot){
-    while(robot->direction != 'N'){
-        right(robot);
-    }
+void markVisited(Robot *robot, Tile *tile){
+    background();
+    tile[robot->tileIndex].visited = 1;
+    setColour(gray);
+    fillRect(robot->x, robot->y, GRID_SIZE, GRID_SIZE);
 }
-void faceEast(Robot *robot){
-    while(robot->direction != 'E'){
-        right(robot);
-    }
-}
-void faceSouth(Robot *robot){
-    while(robot->direction != 'S'){
-        right(robot);
-    }
-}
-void faceWest(Robot *robot){
-    while(robot->direction != 'W'){
-        right(robot);
+
+char checkAdjacentTiles(Robot *robot, Tile *tile){
+    int robotIndex = robot->tileIndex;
+    if((tile[robotIndex - NUMCOLS].type == 't' || tile[robotIndex - NUMCOLS].type == 'm') && !tile[robotIndex - NUMCOLS].visited){
+        return 'N'; //north
+    } else if((tile[robotIndex + 1].type == 't' || tile[robotIndex + 1].type == 'm') && !tile[robotIndex + 1].visited){
+        return 'E'; //east
+    } else if((tile[robotIndex + NUMCOLS].type == 't' || tile[robotIndex + NUMCOLS].type == 'm') && !tile[robotIndex + NUMCOLS].visited){
+        return 'S'; //south
+    } else if((tile[robotIndex - 1].type == 't' || tile[robotIndex - 1].type == 'm') && !tile[robotIndex - 1].visited){
+        return 'W'; //west
+    } else{
+        return 'F'; //no qualifying tiles
     }
 }
 
+
+int moveToAdjacent(Robot *robot, Tile *tile, funcPtr *rtnStack, int *topRtnPtr){
+    //check for the first adjacent tile i can move to
+        char moveableTile = checkAdjacentTiles(robot, tile);
+        switch(moveableTile){
+            case 'N':
+                faceNorth(robot);
+                sleep(SLEEPTIME);
+                forward(robot);
+                sleep(SLEEPTIME);
+                pushToStack(forward, rtnStack, topRtnPtr);
+                pushToStack(faceSouth, rtnStack, topRtnPtr);
+                break;
+            case 'E':
+                faceEast(robot);
+                sleep(SLEEPTIME);
+                forward(robot);
+                sleep(SLEEPTIME);
+                pushToStack(forward, rtnStack, topRtnPtr);
+                pushToStack(faceWest, rtnStack, topRtnPtr);
+                break;
+            case 'S':
+                faceSouth(robot);
+                sleep(SLEEPTIME);
+                forward(robot);
+                sleep(SLEEPTIME);
+                pushToStack(forward, rtnStack, topRtnPtr);
+                pushToStack(faceNorth, rtnStack, topRtnPtr);
+                break;
+            case 'W':
+                faceWest(robot);
+                sleep(SLEEPTIME);
+                forward(robot);
+                sleep(SLEEPTIME);
+                pushToStack(forward, rtnStack, topRtnPtr);
+                pushToStack(faceEast, rtnStack, topRtnPtr);
+                break;
+            default:
+                //no moveable tiles that are unvisited, so backtrack
+                //pop and run returned function
+                funcPtr func = popFromStack(rtnStack, topRtnPtr);
+                func(robot);
+                sleep(SLEEPTIME);
+                return moveToAdjacent(robot, tile, rtnStack, topRtnPtr);
+                //check if there's any adjacent tiles
+        }
+    return 0;
+}
 void runRobot(Robot *robot, Tile *tile){
     int running = 1;
-    int sleepTime = 20;
 
     //create an array to be the stack
     const int MAXSIZE = 200;
-    funcPtr *stack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
-    int topOfStack = 0;
-    int *topPtr = &topOfStack;
+    // funcPtr *stack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
+    funcPtr *rtnStack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
+    // int topOfStack = 0;
+    int topOfRtnStack = 0;
+    // int *topPtr = &topOfStack;
+    int *topRtnPtr = &topOfRtnStack;
+
+    // REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
+    // I NEED TO CHECKOUT MAIN WHEN I FIGURE OUT HOW TO DO THE ALGORITHM
+
+
+    while(running){
+
+        if(atMarker(robot, tile)){
+            pickUpMarker(robot, tile);
+            sleep(SLEEPTIME);
+            running = 0;
+            //instead I could then enter a new loop which moves the robot to a corner and drops the markers
+        }
+
+        if(!isVisited(robot, tile)){
+            markVisited(robot, tile);
+        }
+        
+        moveToAdjacent(robot, tile, rtnStack, topRtnPtr);
+    }
+        
+}
+
+    //check if current tile is a marker
+    //mark the tile as visited
+    //draw a grey rectangle to show it's visited 
+    //check adjacent tiles to see if they're of type 't' or 'm' and are unvisited
+    //once the first moveable, unvisited adjacent tile has been found push the function calls necessary to get the robot to that tile 
+    //also push the opposite moves to a new stack to get the robot back to where it started
+    //repeat the check and keep going until it reaches a point where there aren't any unvisited, moveable adjacent tiles
+    //pop the function calls from the 2nd stack to backtrack to the start
+    //everytime I pop and call a function, do the check to see if there are any moveable tiles. 
+
 
 
     // pushToStack(forward, stack, topPtr);
@@ -265,7 +377,5 @@ void runRobot(Robot *robot, Tile *tile){
     // }
 
 
-    REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
-    I NEED TO CHECKOUT MAIN WHEN I FIGURE OUT HOW TO DO THE ALGORITHM
-
-}
+    // REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
+    // I NEED TO CHECKOUT MAIN WHEN I FIGURE OUT HOW TO DO THE ALGORITHM
