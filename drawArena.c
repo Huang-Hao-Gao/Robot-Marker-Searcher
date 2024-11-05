@@ -9,6 +9,7 @@ int const MINROWCOL = 7;
 int const MAXROWCOL = 15;
 int NUMROWS;
 int NUMCOLS;
+int totMarkers;
 // Using #define for SIZE ensures that it always represents the current product of NUMROWS and NUMCOLS,
 // even if these values are changed later in the code. This keeps SIZE consistent with their current values.
 #define SIZE (NUMROWS * NUMCOLS)
@@ -135,8 +136,8 @@ void createTiles(Tile *tile, int rows, int columns){
         y += GRID_SIZE;
     }
 
-
-    int totMarkers = randomNum(3, 5);
+    //create markers and obstacles
+    totMarkers = randomNum(3, 5);
     int totObstacles = randomNum(4, 8);
     createUniqueTiles(tile, totMarkers, 'm');
     createUniqueTiles(tile, totObstacles, 'o');

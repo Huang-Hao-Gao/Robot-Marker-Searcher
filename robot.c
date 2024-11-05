@@ -319,9 +319,23 @@ void runRobot(Robot *robot, Tile *tile){
 
         if(atMarker(robot, tile)){
             pickUpMarker(robot, tile);
-            running = 0;
-            break;
-            //instead I could then enter a new loop which moves the robot to a corner and drops the markers
+            if(robot->numMarkers == totMarkers){
+                //move to top left corner 
+                // int atTopLeft = 0;
+                // while(!atTopLeft){
+                // if(canMoveForward(robot, tile) && !onCorner){
+                // forward(robot);
+                // } else if(!canMoveForward(robot, tile) && !onCorner){
+                //     faceWest(robot);
+                // }
+
+                //drop the marker
+                forward(robot);
+                dropMarker(robot, tile);
+                running = 0;
+                break;
+            }
+
         }
 
         if(!isVisited(robot, tile)){
