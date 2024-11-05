@@ -173,15 +173,10 @@ void startRobot(Tile *tile){
             isValid = 1;
         }
     }
-    // int index = randomNum(NUMCOLS + 1, NUMCOLS * (NUMROWS - 1) - 2);
-    // // int index = 25;
-    // robot.x = tile[index].x;
-    // robot.y = tile[index].y;
-    // robot.tileIndex = index;
     robot.numMarkers = 0;
     //set random direction
     char directions[] = {'N', 'E', 'S', 'W'};
-    robot.direction = 'N';
+    robot.direction = directions[randomNum(0, 3)];
 
     //draw the robot
     drawRobot(&robot);
@@ -324,8 +319,8 @@ void runRobot(Robot *robot, Tile *tile){
 
         if(atMarker(robot, tile)){
             pickUpMarker(robot, tile);
-            sleep(SLEEPTIME);
             running = 0;
+            break;
             //instead I could then enter a new loop which moves the robot to a corner and drops the markers
         }
 
