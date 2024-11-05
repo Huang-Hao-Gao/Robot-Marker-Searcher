@@ -163,20 +163,21 @@ void drawRobot(Robot *robot){
 void startRobot(Tile *tile){
     Robot robot;
     int isValid = 0;
-    //initialise robot position
-    // while(!isValid){
-    //     int index = randomNum(0, SIZE);
-    //     if(tile[index].type == 't'){
-    //         robot.x = tile[index].x;
-    //         robot.y = tile[index].y;
-    //         robot.tileIndex = index;
-    //         isValid = 1;
-    //     }
-    // }
-    int index = NUMCOLS * (NUMROWS - 2) + 3;
-    robot.x = tile[index].x;
-    robot.y = tile[index].y;
-    robot.tileIndex = index;
+    // initialise robot position
+    while(!isValid){
+        int index = randomNum(NUMCOLS + 1, SIZE);
+        if(tile[index].type == 't'){
+            robot.x = tile[index].x;
+            robot.y = tile[index].y;
+            robot.tileIndex = index;
+            isValid = 1;
+        }
+    }
+    // int index = randomNum(NUMCOLS + 1, NUMCOLS * (NUMROWS - 1) - 2);
+    // // int index = 25;
+    // robot.x = tile[index].x;
+    // robot.y = tile[index].y;
+    // robot.tileIndex = index;
     robot.numMarkers = 0;
     //set random direction
     char directions[] = {'N', 'E', 'S', 'W'};
@@ -184,7 +185,7 @@ void startRobot(Tile *tile){
 
     //draw the robot
     drawRobot(&robot);
-    runRobot(&robot, tile);
+    // runRobot(&robot, tile);
     }
 
 
@@ -310,11 +311,8 @@ void runRobot(Robot *robot, Tile *tile){
 
     //create an array to be the stack
     const int MAXSIZE = 200;
-    // funcPtr *stack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
     funcPtr *rtnStack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
-    // int topOfStack = 0;
     int topOfRtnStack = 0;
-    // int *topPtr = &topOfStack;
     int *topRtnPtr = &topOfRtnStack;
 
     // REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
