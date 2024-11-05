@@ -7,7 +7,7 @@
 #include "robot.h"
 
 
-const int SLEEPTIME = 500;
+const int SLEEPTIME = 5;
 
 int atMarker(Robot *robot, Tile *tile){
     return tile[robot->tileIndex].type == 'm';
@@ -185,7 +185,7 @@ void startRobot(Tile *tile){
 
     //draw the robot
     drawRobot(&robot);
-    // runRobot(&robot, tile);
+    runRobot(&robot, tile);
     }
 
 
@@ -219,13 +219,13 @@ typedef void(*funcPtr)(Robot*);
 
 void pushToStack(funcPtr func, funcPtr *stack, int *topPtr){
     stack[*topPtr] = func;
-    *topPtr++;
+    (*topPtr)++;
 }
 
 funcPtr popFromStack(funcPtr *stack, int *topPtr){
     if(*topPtr > 0){
-        funcPtr popped = stack[*topPtr - 1];
-        *topPtr--;
+        funcPtr popped = stack[(*topPtr) - 1];
+        (*topPtr)--;
         return popped;
     } else{
         printf("tried to pop from empty stack\n");
@@ -239,7 +239,7 @@ bool isVisited(Robot *robot, Tile *tile){
 void markVisited(Robot *robot, Tile *tile){
     background();
     tile[robot->tileIndex].visited = 1;
-    setColour(gray);
+    setColour(green);
     fillRect(robot->x, robot->y, GRID_SIZE, GRID_SIZE);
 }
 
@@ -259,7 +259,7 @@ char checkAdjacentTiles(Robot *robot, Tile *tile){
 }
 
 
-int moveToAdjacent(Robot *robot, Tile *tile, funcPtr *rtnStack, int *topRtnPtr){
+void moveToAdjacent(Robot *robot, Tile *tile, funcPtr *rtnStack, int *topRtnPtr){
     //check for the first adjacent tile i can move to
         char moveableTile = checkAdjacentTiles(robot, tile);
         switch(moveableTile){
@@ -295,23 +295,24 @@ int moveToAdjacent(Robot *robot, Tile *tile, funcPtr *rtnStack, int *topRtnPtr){
                 pushToStack(forward, rtnStack, topRtnPtr);
                 pushToStack(faceEast, rtnStack, topRtnPtr);
                 break;
-            default:
+            case 'F':
                 //no moveable tiles that are unvisited, so backtrack
                 //pop and run returned function
+
                 funcPtr func = popFromStack(rtnStack, topRtnPtr);
                 func(robot);
                 sleep(SLEEPTIME);
-                return moveToAdjacent(robot, tile, rtnStack, topRtnPtr);
+                moveToAdjacent(robot, tile, rtnStack, topRtnPtr);
+                break;
                 //check if there's any adjacent tiles
         }
-    return 0;
 }
 void runRobot(Robot *robot, Tile *tile){
     int running = 1;
 
     //create an array to be the stack
     const int MAXSIZE = 200;
-    funcPtr *rtnStack = (funcPtr*)malloc(MAXSIZE * sizeof(funcPtr));
+    funcPtr *rtnStack = (funcPtr*)calloc(MAXSIZE, sizeof(funcPtr));
     int topOfRtnStack = 0;
     int *topRtnPtr = &topOfRtnStack;
 
@@ -330,11 +331,12 @@ void runRobot(Robot *robot, Tile *tile){
 
         if(!isVisited(robot, tile)){
             markVisited(robot, tile);
+            sleep(SLEEPTIME);
         }
-        
+        sleep(SLEEPTIME);
         moveToAdjacent(robot, tile, rtnStack, topRtnPtr);
     }
-        
+    free(rtnStack);
 }
 
     //check if current tile is a marker
@@ -346,33 +348,6 @@ void runRobot(Robot *robot, Tile *tile){
     //repeat the check and keep going until it reaches a point where there aren't any unvisited, moveable adjacent tiles
     //pop the function calls from the 2nd stack to backtrack to the start
     //everytime I pop and call a function, do the check to see if there are any moveable tiles. 
-
-
-
-    // pushToStack(forward, stack, topPtr);
-    // if(canMoveForward(robot, tile)){
-    //     forward(robot);
-    // } else{
-    //     right(robot);
-    //     right(robot);
-    // }
-    // while(running){
-    //     if(!visited){
-    //         tile[robot->tileIndex].visited = true;
-    //     }
-    //     if(atMarker(robot, tile)){
-    //         pickUpMarker(robot, tile);
-    //     }
-
-    //     funcPtr nextMove = popFromStack(stack, topPtr);
-    //     if(nextMove == forward && canMoveForward(robot, tile) || nextMove != forward){
-    //         nextMove(robot);
-
-    //         int index = robot->tileIndex;
-    //         //check if adjacent tiles are able to be moved into and are unvisited
-
-    //     }
-    // }
 
 
     // REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
