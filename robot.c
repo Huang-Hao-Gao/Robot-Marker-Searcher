@@ -209,10 +209,10 @@ bool isVisited(Robot *robot, Tile *tile){
     return tile[robot->tileIndex].visited;
 }
 
-void markVisited(Robot *robot, Tile *tile){
+void markVisited(Robot *robot, Tile *tile, colour colour){
     background();
     tile[robot->tileIndex].visited = 1;
-    setColour(green);
+    setColour(colour);
     fillRect(robot->x, robot->y, GRID_SIZE, GRID_SIZE);
 }
 
@@ -305,34 +305,29 @@ void startRobot(Tile *tile){
 
 
 void runRobot(Robot *robot, Tile *tile){
-    int running = 1;
-
     //create an array to be the stack
     const int MAXSIZE = 200;
     funcPtr *rtnStack = (funcPtr*)calloc(MAXSIZE, sizeof(funcPtr));
     int topOfRtnStack = 0;
     int *topRtnPtr = &topOfRtnStack;
 
-    // REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
-    // I NEED TO CHECKOUT MAIN WHEN I FIGURE OUT HOW TO DO THE ALGORITHM
-
-
+    int running = 1;
     while(running){
 
         if(atMarker(robot, tile)){
             pickUpMarker(robot, tile);
             if(robot->numMarkers == totMarkers){
-                //move to top left corner 
-                // int atTopLeft = 0;
-                // while(!atTopLeft){
-                // if(canMoveForward(robot, tile) && !onCorner){
-                // forward(robot);
-                // } else if(!canMoveForward(robot, tile) && !onCorner){
-                //     faceWest(robot);
-                // }
-
-                //drop the marker
-                // forward(robot);
+                for(int i = 0; i < SIZE; i++){
+                    tile[i].visited = false;
+                }
+                while(!onCorner(robot, tile)){
+                    if(!isVisited(robot, tile)){
+                        markVisited(robot, tile, orange);
+                        sleep(SLEEPTIME);
+                        }
+                    sleep(SLEEPTIME);
+                    moveToAdjacent(robot, tile, rtnStack, topRtnPtr);
+                }
                 dropMarker(robot, tile);
                 printf("I've successfully finished");
                 running = 0;
@@ -342,7 +337,7 @@ void runRobot(Robot *robot, Tile *tile){
         }
 
         if(!isVisited(robot, tile)){
-            markVisited(robot, tile);
+            markVisited(robot, tile, green);
             sleep(SLEEPTIME);
         }
         sleep(SLEEPTIME);
@@ -351,16 +346,3 @@ void runRobot(Robot *robot, Tile *tile){
     free(rtnStack);
 }
 
-    //check if current tile is a marker
-    //mark the tile as visited
-    //draw a grey rectangle to show it's visited 
-    //check adjacent tiles to see if they're of type 't' or 'm' and are unvisited
-    //once the first moveable, unvisited adjacent tile has been found push the function calls necessary to get the robot to that tile 
-    //also push the opposite moves to a new stack to get the robot back to where it started
-    //repeat the check and keep going until it reaches a point where there aren't any unvisited, moveable adjacent tiles
-    //pop the function calls from the 2nd stack to backtrack to the start
-    //everytime I pop and call a function, do the check to see if there are any moveable tiles. 
-
-
-    // REMEMBER THAT I'M ON THE simple-dfs branch!!!!!!!!!!!!!!!!!!!!!!!!
-    // I NEED TO CHECKOUT MAIN WHEN I FIGURE OUT HOW TO DO THE ALGORITHM
