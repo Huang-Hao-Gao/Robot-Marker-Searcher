@@ -160,28 +160,6 @@ void drawRobot(Robot *robot){
 }
 
 
-void startRobot(Tile *tile){
-    Robot robot;
-    int isValid = 0;
-    // initialise robot position
-    while(!isValid){
-        int index = randomNum(NUMCOLS + 1, SIZE);
-        if(tile[index].type == 't'){
-            robot.x = tile[index].x;
-            robot.y = tile[index].y;
-            robot.tileIndex = index;
-            isValid = 1;
-        }
-    }
-    robot.numMarkers = 0;
-    //set random direction
-    char directions[] = {'N', 'E', 'S', 'W'};
-    robot.direction = directions[randomNum(0, 3)];
-
-    //draw the robot
-    drawRobot(&robot);
-    runRobot(&robot, tile);
-    }
 
 
 void faceNorth(Robot *robot){
@@ -302,6 +280,30 @@ void moveToAdjacent(Robot *robot, Tile *tile, funcPtr *rtnStack, int *topRtnPtr)
                 //check if there's any adjacent tiles
         }
 }
+void startRobot(Tile *tile){
+    Robot robot;
+    int isValid = 0;
+    // initialise robot position
+    while(!isValid){
+        int index = randomNum(NUMCOLS + 1, SIZE);
+        if(tile[index].type == 't'){
+            robot.x = tile[index].x;
+            robot.y = tile[index].y;
+            robot.tileIndex = index;
+            isValid = 1;
+        }
+    }
+    robot.numMarkers = 0;
+    //set random direction
+    char directions[] = {'N', 'E', 'S', 'W'};
+    robot.direction = directions[randomNum(0, 3)];
+
+    //draw the robot
+    drawRobot(&robot);
+    runRobot(&robot, tile);
+    }
+
+
 void runRobot(Robot *robot, Tile *tile){
     int running = 1;
 
@@ -330,8 +332,9 @@ void runRobot(Robot *robot, Tile *tile){
                 // }
 
                 //drop the marker
-                forward(robot);
+                // forward(robot);
                 dropMarker(robot, tile);
+                printf("I've successfully finished");
                 running = 0;
                 break;
             }

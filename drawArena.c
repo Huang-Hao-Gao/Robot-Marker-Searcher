@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "graphics.h"
 #include "globals.h"
 #include "drawArena.h"
@@ -62,12 +63,28 @@ void drawOneTile(int x, int y, colour colour){
     setColour(gray);
 }
 
+
+bool checkMoveableTile(Tile tile){
+    return tile.type == 't' || tile.type == 'm';
+}
+bool checkImpossibleTile(Tile *tile, int index){
+    if(checkMoveableTile(tile[index - NUMCOLS]) || checkMoveableTile(tile[index - 1]) || checkMoveableTile(tile[index + 1]) || checkMoveableTile(tile[index + NUMCOLS])){
+        return false;
+    }
+    return true;
+}
+
 void createUniqueTiles(Tile *tile, int numTiles, char type){
 
     //I need to add a check to ensure that the obstacles don't make the markers impossible to get to
     int tilesDrawn = 0;
     while(tilesDrawn != numTiles){
         int index = randomNum(NUMCOLS + 1, NUMCOLS*(NUMROWS-1) - 2);
+        if(type == 'm'){
+            if(checkImpossibleTile(tile, index)){
+                continue;
+            }
+        }
             //check we're on a tile
             if(tile[index].type == 't'){
                 tile[index].type = type;
@@ -75,6 +92,9 @@ void createUniqueTiles(Tile *tile, int numTiles, char type){
             }
     }
 }
+
+//returns true if marker/home tile is impossible to get to
+//returns false if possible
 
 void replaceFreeTile(Tile curTile){
     background();
@@ -139,8 +159,8 @@ void createTiles(Tile *tile, int rows, int columns){
     //create markers and obstacles
     totMarkers = randomNum(3, 5);
     int totObstacles = randomNum(4, 8);
-    createUniqueTiles(tile, totMarkers, 'm');
     createUniqueTiles(tile, totObstacles, 'o');
+    createUniqueTiles(tile, totMarkers, 'm');
 
 }
 
